@@ -4,6 +4,8 @@
 #   Initial build.
 #
 
+import sys
+
 import ted
 import ted.sdss
 
@@ -183,11 +185,64 @@ INSERT INTO Supernovae
 
 
 def main(*args):
+    """
+    The main controller for running the
+    programs written for this thesis project.
+
+    Parameters
+    ----------
+    args : list
+        contains words whose order is independent
+        from their use in this function.
+
+        If a word whose presence is checked for *is* present,
+        some action is performed. But only in the order in
+        which it is placed in the script.
+
+    To do
+    -----
+    Make script check whether some procedure has been performed,
+    before a procedure that depends on this being so is performed.
+
+    One way to do it could be to update a log file which can be cleared
+    if there is a need for starting over from the top. This would only
+    be a deletion of records of the steps having been performed so far,
+    and not the data that were generated as a consequence of running
+    those procedures. Each of the procedures may or may not check if
+    any given data already exist and redo or skip creating those data
+    unless specifically being forced to.
+
+    Returns
+    -------
+    None
+
+    """
+
+    """Clean up?
+    """
+
+    # asdf
+
+    """Foundation
+
+    * Creating the list of coordinates for which to obtain overlapping
+      image frames.
+
+    * Create database files that will contain easily accessible metadata.
+
+    """
 
     if 0:
         sql_fill_table_SNe()
 
+    """Data gathering
+
+
+    """
+
     if 0:
+
+        # Just for showing a few datapoints.
         df = ted.sdss.load_SNe()
         print df.head(3)
         # df.index = df.SDSS_id
@@ -223,4 +278,4 @@ def main(*args):
 
 
 if __name__ == '__main__':
-    main()
+    main(*sys.argv[1:])
