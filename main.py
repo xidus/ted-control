@@ -8,6 +8,8 @@ import sys
 
 import ted
 import ted.sdss
+import ted.sdss.cas
+import ted.sdss.das
 
 
 def main(*args):
@@ -70,10 +72,12 @@ def main(*args):
 
     """
 
-    if 'cas-snlist-merge' in args:
+    if 'snlist-merge' in args:
+
         ted.sdss.merge_sne_lists()
 
-    if 'cas-snlist-sql-insert' in args:
+    if 'snlist-sql-insert' in args:
+
         ted.sdss.sql_fill_table_SNe()
 
     # CAS
@@ -81,6 +85,7 @@ def main(*args):
 
     # Clean up?
     if 'cas-clean' in args:
+
         ted.sdss.cas.field_clean_local_dir()
 
     if 'cas-get' in args:
@@ -95,15 +100,19 @@ def main(*args):
         ted.sdss.cas.get_fields()
         # ted.sdss.CAS_get_fields(in_parallel=True, pool_size=10) # Not possible, since CAS online query form limits to 1 request per second.
 
+        print 'cas-get: Done ...'
+
     if 'cas-csv-gather-fields' in args:
 
         # Organise the downloaded data
+        print 'cas-csv-gather-fields: Creating unique field list ...'
         ted.sdss.cas.create_unique_field_list()
 
         # ...and prepare them for preliminary statistical analysis.
+        print 'cas-csv-gather-fields: Counting field records for each supernova ...'
         ted.sdss.cas.count_field_records()
 
-    if 'cas-get-galaxies':
+    if 'cas-get-galaxies' in args:
 
         ted.sdss.cas.get_galaxies()
 
@@ -122,7 +131,7 @@ def main(*args):
         #       * update a database table of downloaded frames?
         #           or would this be better done with a general file checking script which uses a database table of all the frames, and checks each file one by one to see if it was downloade, and, if not, try to download it, if an attempt has not already been made and the HTTP status code made it clear that it would not be available. Compile a list of non-downloadable frames and send it to the SDSS collaboration.
         #
-        pass
+        ted.sdss.das.download_frames_by_sn(bix=0, eix=5, frame_type='fpC', filt='r', pool_size=10)
 
     if 'das-get-all' in args:
 
@@ -134,6 +143,8 @@ def main(*args):
         # ted.sdss.DAS_download_fields(in_parallel=True, pool_size=10)
         ted.sdss.DAS_download_fields_from_list(pool_size=20)
         # ted.sdss.DAS_download_fields()
+
+    print 'main.py: Done ...'
 
 
 if __name__ == '__main__':
