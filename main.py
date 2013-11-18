@@ -102,14 +102,24 @@ def main(*args):
 
         print 'cas-get: Done ...'
 
-    if 'cas-csv-gather-fields' in args:
+    if 'cas-csv-fields-filter-invalid' in args:
 
-        # Organise the downloaded data
-        print 'cas-csv-gather-fields: Creating unique field list ...'
+        print 'cas-csv-fields-filter-invalid: Filtering invalid fields from unique field list ...'
+        ted.sdss.cas.filter_invalid_from_unique_field_list()
+
+    if 'cas-csv-fields-gather' in args:
+
+        # Build a single list of alle the unique fields that cover any of the candidate supernovae.
+        print 'cas-csv-fields-gather: Creating unique field list ...'
+        # Keep invalid frames (negative or having ~ zero RA extent) for now,
+        # but this is a big problem, when coding up the analysis,
+        # since I need to manually exclude these every time.
         ted.sdss.cas.create_unique_field_list()
 
-        # ...and prepare them for preliminary statistical analysis.
-        print 'cas-csv-gather-fields: Counting field records for each supernova ...'
+    if 'cas-csv-fields-nrecords' in args:
+
+        # Count how many fields that cover each candidate.
+        print 'cas-csv-fields-nrecords: Counting field records for each supernova ...'
         ted.sdss.cas.count_field_records()
 
     if 'cas-get-galaxies' in args:
