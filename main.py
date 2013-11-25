@@ -88,7 +88,7 @@ def main(*args):
 
         ted.sdss.cas.field_clean_local_dir()
 
-    if 'cas-get' in args:
+    if 'cas-get-fields' in args:
 
         # Just for showing a few datapoints.
         # Incidentally, this call also makes sure that the source candidate files are being merged into one, if not already done.
@@ -96,11 +96,19 @@ def main(*args):
         print df.head(3)
         # df.index = df.SDSS_id
 
-        print '\nQuerying CAS online form ...'
+        print '\nQuerying CAS online form (skipping existing files) ...'
         ted.sdss.cas.get_fields()
         # ted.sdss.CAS_get_fields(in_parallel=True, pool_size=10) # Not possible, since CAS online query form limits to 1 request per second.
 
-        print 'cas-get: Done ...'
+        print 'cas-get-fields: Done ...'
+
+    if 'cas-get-fields-force' in args:
+
+        print '\nQuerying CAS online form (force-mode) ...'
+        ted.sdss.cas.get_fields(ignore_saved=False)
+        # ted.sdss.CAS_get_fields(in_parallel=True, pool_size=10) # Not possible, since CAS online query form limits to 1 request per second.
+
+        print 'cas-get-fields-forced: Done ...'
 
     if 'cas-csv-fields-filter-invalid' in args:
 
@@ -141,7 +149,8 @@ def main(*args):
         #       * update a database table of downloaded frames?
         #           or would this be better done with a general file checking script which uses a database table of all the frames, and checks each file one by one to see if it was downloade, and, if not, try to download it, if an attempt has not already been made and the HTTP status code made it clear that it would not be available. Compile a list of non-downloadable frames and send it to the SDSS collaboration.
         #
-        ted.sdss.das.download_frames_by_sn(bix=0, eix=5, frame_type='fpC', filt='r', pool_size=10)
+        # ted.sdss.das.download_frames_by_sn(bix=0, eix=5, frame_type='fpC', filt='r', pool_size=10)
+        ted.sdss.das.download_frames_by_sn(bix=5, eix=10, frame_type='fpC', filt='r', pool_size=10)
 
     if 'das-get-all' in args:
 
