@@ -80,8 +80,9 @@ def main(*args):
 
         ted.sdss.sql_fill_table_SNe()
 
-    # CAS
-    # ---
+    # ----------------------------------------------------------------------- #
+
+    """CAS"""
 
     # Clean up?
     if 'cas-clean' in args:
@@ -130,12 +131,26 @@ def main(*args):
         print 'cas-csv-fields-nrecords: Counting field records for each supernova ...'
         ted.sdss.cas.count_field_records()
 
+    # ----------------------------------------------------------------------- #
+
+    """GALAXIES"""
+
     if 'cas-get-galaxies' in args:
 
         ted.sdss.cas.get_galaxies()
 
-    # DAS
-    # ---
+    if 'cas-create-galaxy-list' in args:
+
+        ted.sdss.cas.create_galaxy_list()
+
+    if 'cas-build-tlist' in args:
+
+        ted.sdss.cas.build_tlist()
+
+
+    # ----------------------------------------------------------------------- #
+
+    """DAS"""
 
     if 'das-get-some' in args:
 
@@ -160,8 +175,19 @@ def main(*args):
         ted.sdss.das.export_fpC_URIs()
 
         # ted.sdss.DAS_download_fields(in_parallel=True, pool_size=10)
-        ted.sdss.DAS_download_fields_from_list(pool_size=20)
+        ted.sdss.das.download_fields_from_list(pool_size=20)
         # ted.sdss.DAS_download_fields()
+
+    if 'das-check-field-list' in args:
+
+        print 'Assuming that all frames have been downloaded,'
+        print 'excluded from fields.csv entries for which frames do not work.'
+
+        # ted.sdss.das.check_field_list()
+        ted.sdss.das.check_field_list(do_get_frames=False)
+
+
+    """DONE"""
 
     print 'main.py: Done ...'
 
