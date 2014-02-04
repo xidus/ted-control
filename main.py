@@ -10,6 +10,7 @@ import ted
 import ted.sdss
 import ted.sdss.cas
 import ted.sdss.das
+import ted.sdss.cutouts
 
 
 def main(*args):
@@ -147,7 +148,6 @@ def main(*args):
 
         ted.sdss.cas.build_tlist()
 
-
     # ----------------------------------------------------------------------- #
 
     """DAS"""
@@ -186,6 +186,20 @@ def main(*args):
         # ted.sdss.das.check_field_list()
         ted.sdss.das.check_field_list(do_get_frames=False)
 
+
+    # ----------------------------------------------------------------------- #
+
+    """CUTOUTS"""
+
+    if 'cut-create' in args:
+
+        ted.sdss.cutouts.create_cutout_data()
+
+    if 'cut-search' in args:
+
+        ted.sdss.cutouts.do_grid_search()
+
+    # ----------------------------------------------------------------------- #
 
     """DONE"""
 
