@@ -81,6 +81,10 @@ def main(*args):
 
         ted.sdss.sql_fill_table_SNe()
 
+    if 'snlist-check-duplicates' in args:
+
+        ted.sdss.cas.check_snlist()
+
     # ----------------------------------------------------------------------- #
 
     """CAS"""
@@ -147,6 +151,14 @@ def main(*args):
     if 'cas-build-tlist' in args:
 
         ted.sdss.cas.build_tlist()
+
+    if 'cas-build-tlist-sample' in args:
+
+        ted.sdss.cas.build_tlist_sample()
+
+    if 'cas-check-tlist' in args:
+
+        ted.sdss.cas.check_tlist()
 
     # ----------------------------------------------------------------------- #
 
