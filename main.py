@@ -11,6 +11,7 @@ import ted.sdss
 import ted.sdss.cas
 import ted.sdss.das
 import ted.sdss.cutouts
+import ted.sdss.cutouts.manage
 
 
 def main(*args):
@@ -210,6 +211,10 @@ def main(*args):
     if 'cut-search' in args:
 
         ted.sdss.cutouts.do_grid_search()
+
+    if 'cut-remove-unwanted' in args:
+
+        ted.sdss.cutouts.manage.remove_unwanted_data()
 
     # ----------------------------------------------------------------------- #
 
