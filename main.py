@@ -112,15 +112,10 @@ def main(*args):
     if 'cas-get-fields-force' in args:
 
         print '\nQuerying CAS online form (force-mode) ...'
-        ted.sdss.cas.get_fields(ignore_saved=False)
+        ted.sdss.cas.get_fields(skip_if_exists=False)
         # ted.sdss.CAS_get_fields(in_parallel=True, pool_size=10) # Not possible, since CAS online query form limits to 1 request per second.
 
         print 'cas-get-fields-forced: Done ...'
-
-    if 'cas-csv-fields-filter-invalid' in args:
-
-        print 'cas-csv-fields-filter-invalid: Filtering invalid fields from unique field list ...'
-        ted.sdss.cas.filter_invalid_from_unique_field_list()
 
     if 'cas-csv-fields-gather' in args:
 
@@ -130,6 +125,11 @@ def main(*args):
         # but this is a big problem, when coding up the analysis,
         # since I need to manually exclude these every time.
         ted.sdss.cas.create_unique_field_list()
+
+    if 'cas-csv-fields-filter-invalid' in args:
+
+        print 'cas-csv-fields-filter-invalid: Filtering invalid fields from unique field list ...'
+        ted.sdss.cas.filter_invalid_from_unique_field_list()
 
     if 'cas-csv-fields-nrecords' in args:
 
@@ -167,7 +167,7 @@ def main(*args):
 
     if 'das-get-some' in args:
 
-        print 'Getting only some of the frames from the DAS (same as test mode)...'
+        print 'Getting only some of the frames from the DAS for testing ...'
         # Select slice of SNe candidates to download frames for.
         # A single function gets a single FITS file, and it is called when downloading both all or some of the frames.
         #   it should
@@ -215,6 +215,10 @@ def main(*args):
     if 'cut-remove-unwanted' in args:
 
         ted.sdss.cutouts.manage.remove_unwanted_data()
+
+    if 'cut-remove-flags' in args:
+
+        ted.sdss.cutouts.manage.remove_flags()
 
     # ----------------------------------------------------------------------- #
 
