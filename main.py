@@ -12,6 +12,7 @@ import ted.sdss.cas
 import ted.sdss.das
 import ted.sdss.cutouts
 import ted.sdss.cutouts.manage
+import ted.sdss.cutouts.plotting
 
 
 def main(*args):
@@ -137,6 +138,11 @@ def main(*args):
         print 'cas-csv-fields-nrecords: Counting field records for each supernova ...'
         ted.sdss.cas.count_field_records()
 
+    if 'cas-csv-fields-nrecords-q' in args:
+
+        print 'cas-csv-fields-nrecords-q: Counting field records for each supernova ...'
+        ted.sdss.cas.count_field_records_by_quality()
+
     # ----------------------------------------------------------------------- #
 
     """GALAXIES"""
@@ -159,6 +165,7 @@ def main(*args):
 
     if 'cas-check-tlist' in args:
 
+        """For each entry in `tlist.csv`, find out how many fields cover it."""
         ted.sdss.cas.check_tlist()
 
     # ----------------------------------------------------------------------- #
@@ -219,6 +226,10 @@ def main(*args):
     if 'cut-remove-flags' in args:
 
         ted.sdss.cutouts.manage.remove_flags()
+
+    if 'cut-tlist-log-plot' in args:
+
+        ted.sdss.cutouts.plotting.plot_tlist_log()
 
     # ----------------------------------------------------------------------- #
 
