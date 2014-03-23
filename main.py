@@ -211,9 +211,17 @@ def main(*args):
 
     """CUTOUTS"""
 
-    if 'cut-create' in args:
+    if 'cut-create-raw' in args:
 
         ted.sdss.cutouts.create_cutout_data()
+
+    if 'cut-create-fp2q' in args:
+
+        ted.sdss.cutouts.create_cutout_original_to_field_quality_dict()
+
+    if 'cut-create-c2q' in args:
+
+        ted.sdss.cutouts.create_cutout2quality_mapping()
 
     if 'cut-search' in args:
 
