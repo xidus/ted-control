@@ -13,6 +13,7 @@ import ted.sdss.das
 import ted.sdss.cutouts
 import ted.sdss.cutouts.manage
 import ted.sdss.cutouts.plotting
+import ted.sdss.cutouts.crossvalidation
 
 
 def main(*args):
@@ -223,10 +224,6 @@ def main(*args):
 
         ted.sdss.cutouts.create_cutout2quality_mapping()
 
-    if 'cut-search' in args:
-
-        ted.sdss.cutouts.do_grid_search()
-
     if 'cut-remove-unwanted' in args:
 
         ted.sdss.cutouts.manage.remove_unwanted_data()
@@ -238,6 +235,19 @@ def main(*args):
     if 'cut-tlist-log-plot' in args:
 
         ted.sdss.cutouts.plotting.plot_tlist_log()
+
+    if 'cut-cv-any' in args:
+
+        # ted.sdss.cutouts.cross_validated_grid_search()
+        ted.sdss.cutouts.crossvalidation.cv(exp='any')
+
+    if 'cut-cv-any-analyse' in args:
+
+        ted.sdss.cutouts.crossvalidation.analyse(exp='any')
+
+    if 'cut-cv-any-plot' in args:
+
+        ted.sdss.cutouts.crossvalidation.plot(exp='any')
 
     # ----------------------------------------------------------------------- #
 
