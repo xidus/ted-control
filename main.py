@@ -238,16 +238,106 @@ def main(*args):
 
     if 'cut-cv-any' in args:
 
-        # ted.sdss.cutouts.cross_validated_grid_search()
-        ted.sdss.cutouts.crossvalidation.cv(exp='any')
+        if 'q1' in args:
+
+            ted.sdss.cutouts.crossvalidation.cv(exp='any', quality=[1])
+
+        elif 'q2' in args:
+
+            ted.sdss.cutouts.crossvalidation.cv(exp='any', quality=[2])
+
+        elif 'q3' in args:
+
+            ted.sdss.cutouts.crossvalidation.cv(exp='any', quality=[3])
+
+        elif 'q12' in args:
+
+            ted.sdss.cutouts.crossvalidation.cv(exp='any', quality=[1, 2])
+
+        elif 'q23' in args:
+
+            ted.sdss.cutouts.crossvalidation.cv(exp='any', quality=[2, 3])
+
+        elif 'q13' in args:
+
+            ted.sdss.cutouts.crossvalidation.cv(exp='any', quality=[1, 3])
+
+        elif 'q123' in args:
+
+            ted.sdss.cutouts.crossvalidation.cv(exp='any', quality=[1, 2, 3])
+
+        else:
+
+            ted.sdss.cutouts.crossvalidation.cv(exp='any')
 
     if 'cut-cv-any-analyse' in args:
 
-        ted.sdss.cutouts.crossvalidation.analyse(exp='any')
+        if 'q1' in args:
+
+            ted.sdss.cutouts.crossvalidation.analyse(exp='any', quality=[1])
+
+        elif 'q2' in args:
+
+            ted.sdss.cutouts.crossvalidation.analyse(exp='any', quality=[2])
+
+        elif 'q3' in args:
+
+            ted.sdss.cutouts.crossvalidation.analyse(exp='any', quality=[3])
+
+        elif 'q12' in args:
+
+            ted.sdss.cutouts.crossvalidation.analyse(exp='any', quality=[1, 2])
+
+        elif 'q23' in args:
+
+            ted.sdss.cutouts.crossvalidation.analyse(exp='any', quality=[2, 3])
+
+        elif 'q13' in args:
+
+            ted.sdss.cutouts.crossvalidation.analyse(exp='any', quality=[1, 3])
+
+        elif 'q123' in args:
+
+            ted.sdss.cutouts.crossvalidation.analyse(exp='any', quality=[1, 2, 3])
+
+        else:
+
+            ted.sdss.cutouts.crossvalidation.analyse(exp='any')
 
     if 'cut-cv-any-plot' in args:
 
-        ted.sdss.cutouts.crossvalidation.plot(exp='any')
+        if 'q1' in args:
+
+            ted.sdss.cutouts.crossvalidation.plot(exp='any', quality=[1])
+
+        elif 'q2' in args:
+
+            ted.sdss.cutouts.crossvalidation.plot(exp='any', quality=[2])
+
+        elif 'q3' in args:
+
+            ted.sdss.cutouts.crossvalidation.plot(exp='any', quality=[3])
+
+        elif 'q12' in args:
+
+            ted.sdss.cutouts.crossvalidation.plot(exp='any', quality=[1, 2])
+
+        elif 'q23' in args:
+
+            ted.sdss.cutouts.crossvalidation.plot(exp='any', quality=[2, 3])
+
+        elif 'q13' in args:
+
+            ted.sdss.cutouts.crossvalidation.plot(exp='any', quality=[1, 3])
+
+        elif 'q123' in args:
+
+            ted.sdss.cutouts.crossvalidation.plot(exp='any', quality=[1, 2, 3])
+
+        else:
+
+            ted.sdss.cutouts.crossvalidation.plot(exp='any')
+
 
     # ----------------------------------------------------------------------- #
 
