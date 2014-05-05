@@ -236,6 +236,8 @@ def main(*args):
 
         ted.sdss.cutouts.plotting.plot_tlist_log()
 
+    # ANY
+
     if 'cut-cv-any' in args:
 
         if 'q1' in args:
@@ -337,6 +339,52 @@ def main(*args):
         else:
 
             ted.sdss.cutouts.crossvalidation.plot(exp='any')
+
+
+    # BASELINE
+
+    if 'cut-cv-baseline' in args:
+
+        """
+        I need all the qualities, i.e. different number of labels,
+        to account for the accuracy of a given model.
+        """
+        qualities = [
+            [1],
+            [2],
+            [3],
+            [1, 2],
+            [2, 3],
+            [1, 3],
+            [1, 2, 3],
+        ]
+        experiments = ['blr', 'bla', 'bln']
+
+        for exp in experiments:
+            print exp
+            for quality in qualities:
+                print quality
+                ted.sdss.cutouts.crossvalidation.cv(exp=exp, quality=quality)
+
+    if 'cut-cv-baseline-plot' in args:
+
+        qualities = [
+            [1],
+            [2],
+            [3],
+            [1, 2],
+            [2, 3],
+            [1, 3],
+            [1, 2, 3],
+        ]
+        experiments = ['blr', 'bla', 'bln']
+
+        for exp in experiments:
+            print exp
+            for quality in qualities:
+                print quality
+                ted.sdss.cutouts.crossvalidation.plot(exp=exp, quality=quality)
+
 
 
     # ----------------------------------------------------------------------- #
