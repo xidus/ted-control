@@ -340,6 +340,22 @@ def main(*args):
 
             ted.sdss.cutouts.crossvalidation.plot(exp='any')
 
+    if 'cut-cv-any-analyse' in args:
+
+        qualities = [
+            [1],
+            [2],
+            [3],
+            [1, 2],
+            [2, 3],
+            [1, 3],
+            [1, 2, 3],
+        ]
+
+        for quality in qualities:
+            print quality
+            ted.sdss.cutouts.crossvalidation.analyse(exp='any', quality=quality)
+
 
     # BASELINE
 
