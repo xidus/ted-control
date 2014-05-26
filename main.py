@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # Version: Sun 1 Sep 2013
-#   Initial build.
+#   * Initial build.
 #
 
 import sys
@@ -272,39 +272,21 @@ def main(*args):
 
             ted.sdss.cutouts.crossvalidation.cv(exp='any')
 
-    if 'cut-cv-any-analyse' in args:
+    if 'cut-cv-any-all' in args:
 
-        if 'q1' in args:
+        qualities = [
+            [1],
+            [2],
+            [3],
+            [1, 2],
+            [2, 3],
+            [1, 3],
+            [1, 2, 3],
+        ]
 
-            ted.sdss.cutouts.crossvalidation.analyse(exp='any', quality=[1])
-
-        elif 'q2' in args:
-
-            ted.sdss.cutouts.crossvalidation.analyse(exp='any', quality=[2])
-
-        elif 'q3' in args:
-
-            ted.sdss.cutouts.crossvalidation.analyse(exp='any', quality=[3])
-
-        elif 'q12' in args:
-
-            ted.sdss.cutouts.crossvalidation.analyse(exp='any', quality=[1, 2])
-
-        elif 'q23' in args:
-
-            ted.sdss.cutouts.crossvalidation.analyse(exp='any', quality=[2, 3])
-
-        elif 'q13' in args:
-
-            ted.sdss.cutouts.crossvalidation.analyse(exp='any', quality=[1, 3])
-
-        elif 'q123' in args:
-
-            ted.sdss.cutouts.crossvalidation.analyse(exp='any', quality=[1, 2, 3])
-
-        else:
-
-            ted.sdss.cutouts.crossvalidation.analyse(exp='any')
+        for quality in qualities:
+            print quality
+            ted.sdss.cutouts.crossvalidation.cv(exp='any', quality=quality)
 
     if 'cut-cv-any-plot' in args:
 
@@ -340,6 +322,31 @@ def main(*args):
 
             ted.sdss.cutouts.crossvalidation.plot(exp='any')
 
+    if False and 'cut-cv-any-analyse' in args:
+        if 'q1' in args:
+            ted.sdss.cutouts.crossvalidation.analyse(exp='any', quality=[1])
+
+        elif 'q2' in args:
+            ted.sdss.cutouts.crossvalidation.analyse(exp='any', quality=[2])
+
+        elif 'q3' in args:
+            ted.sdss.cutouts.crossvalidation.analyse(exp='any', quality=[3])
+
+        elif 'q12' in args:
+            ted.sdss.cutouts.crossvalidation.analyse(exp='any', quality=[1, 2])
+
+        elif 'q23' in args:
+            ted.sdss.cutouts.crossvalidation.analyse(exp='any', quality=[2, 3])
+
+        elif 'q13' in args:
+            ted.sdss.cutouts.crossvalidation.analyse(exp='any', quality=[1, 3])
+
+        elif 'q123' in args:
+            ted.sdss.cutouts.crossvalidation.analyse(exp='any', quality=[1, 2, 3])
+
+        else:
+            ted.sdss.cutouts.crossvalidation.analyse(exp='any')
+
     if 'cut-cv-any-analyse' in args:
 
         qualities = [
@@ -354,7 +361,7 @@ def main(*args):
 
         for quality in qualities:
             print quality
-            ted.sdss.cutouts.crossvalidation.analyse(exp='any', quality=quality)
+            # ted.sdss.cutouts.crossvalidation.analyse(exp='any', quality=quality)
 
 
     # BASELINE
@@ -420,6 +427,58 @@ def main(*args):
             for quality in qualities:
                 print quality
                 ted.sdss.cutouts.crossvalidation.analyse(exp=exp, quality=quality)
+
+
+    # MANY
+
+    if 'cut-cv-many' in args:
+
+        qualities = [
+            [1],
+            [2],
+            [3],
+            [1, 2],
+            [2, 3],
+            [1, 3],
+            [1, 2, 3],
+        ]
+
+        for quality in qualities:
+            print quality
+            ted.sdss.cutouts.crossvalidation.cv(exp='many', quality=quality)
+
+    if 'cut-cv-many-analyse' in args:
+
+        qualities = [
+            [1],
+            [2],
+            [3],
+            [1, 2],
+            [2, 3],
+            [1, 3],
+            [1, 2, 3],
+        ]
+
+        for quality in qualities:
+            print quality
+            ted.sdss.cutouts.crossvalidation.analyse(exp='many', quality=quality)
+
+    if 'cut-cv-many-plot' in args:
+
+        qualities = [
+            [1],
+            [2],
+            [3],
+            [1, 2],
+            [2, 3],
+            [1, 3],
+            [1, 2, 3],
+        ]
+
+        for quality in qualities:
+            print quality
+            ted.sdss.cutouts.crossvalidation.plot(exp='many', quality=quality)
+
 
 
 
