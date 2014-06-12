@@ -4,7 +4,10 @@
 #   * Initial build.
 #
 
-import sys
+"""
+Control module for running the programs
+written for my master's thesis project.
+"""
 
 import ted
 import ted.sdss
@@ -15,12 +18,29 @@ import ted.sdss.cutouts.manage
 import ted.sdss.cutouts.plotting
 import ted.sdss.cutouts.crossvalidation
 
+from setup_and_parse import setup_and_parse
 
-def main(*args):
+
+def load_args():
+    arglist = [
+        (
+            ('-a', '--action'), dict(type=str, default=None, help='Action to perform')
+        ),
+        (
+            ('-x', '--exp'), dict(type=str, default=None, help='The name of the experiment to run')
+        ),
+        (
+            ('-q', '--quality'), dict(type=int, nargs='+', default=[1, 2, 3])
+        ),
+        # (
+        #     ('--qall'), dict(action='store_true')
+        # ),
+    ]
+    return setup_and_parse(__doc__, arglist)
+
+
+def main():
     """
-    The main controller for running the
-    programs written for this thesis project.
-
     Parameters
     ----------
     args : list
@@ -49,6 +69,11 @@ def main(*args):
     None
 
     """
+
+    args = load_args()
+
+    # Temporary hack
+    args.__class__.__contains__ = lambda self, item: False
 
     # CAS
     # query database and save results for each supernova coordinate in separate file.
@@ -236,41 +261,30 @@ def main(*args):
 
         ted.sdss.cutouts.plotting.plot_tlist_log()
 
-    # ANY
+    # ----------------------------------------------------------------------- #
 
-    if 'cut-cv-any' in args:
+    """EXPERIMENTS"""
 
-        if 'q1' in args:
+    if args.exp is not None:
 
-            ted.sdss.cutouts.crossvalidation.cv(exp='any', quality=[1])
+        print args.exp
+        print args.action
+        print args.quality
 
-        elif 'q2' in args:
+        ekw = dict(exp=args.exp, quality=args.quality)
 
-            ted.sdss.cutouts.crossvalidation.cv(exp='any', quality=[2])
+        if args.action == 'cv':
 
-        elif 'q3' in args:
+           ted.sdss.cutouts.crossvalidation.cv(**ekw)
 
-            ted.sdss.cutouts.crossvalidation.cv(exp='any', quality=[3])
+        elif args.action == 'plot':
 
-        elif 'q12' in args:
+           ted.sdss.cutouts.crossvalidation.plot(**ekw)
 
-            ted.sdss.cutouts.crossvalidation.cv(exp='any', quality=[1, 2])
+        elif args.action == 'analyse':
 
-        elif 'q23' in args:
+           ted.sdss.cutouts.crossvalidation.analyse(**ekw)
 
-            ted.sdss.cutouts.crossvalidation.cv(exp='any', quality=[2, 3])
-
-        elif 'q13' in args:
-
-            ted.sdss.cutouts.crossvalidation.cv(exp='any', quality=[1, 3])
-
-        elif 'q123' in args:
-
-            ted.sdss.cutouts.crossvalidation.cv(exp='any', quality=[1, 2, 3])
-
-        else:
-
-            ted.sdss.cutouts.crossvalidation.cv(exp='any')
 
     if 'cut-cv-any-all' in args:
 
@@ -468,6 +482,36 @@ def main(*args):
             print quality
             ted.sdss.cutouts.crossvalidation.analyse(exp='many', quality=quality)
 
+    if 'cut-cv-many-plot' in args:
+
+        if 'q1' in args:
+
+            ted.sdss.cutouts.crossvalidation.plot(exp='many', quality=[1])
+
+        elif 'q2' in args:
+
+            ted.sdss.cutouts.crossvalidation.plot(exp='many', quality=[2])
+
+        elif 'q3' in args:
+
+            ted.sdss.cutouts.crossvalidation.plot(exp='many', quality=[3])
+
+        elif 'q12' in args:
+
+            ted.sdss.cutouts.crossvalidation.plot(exp='many', quality=[1, 2])
+
+        elif 'q23' in args:
+
+            ted.sdss.cutouts.crossvalidation.plot(exp='many', quality=[2, 3])
+
+        elif 'q13' in args:
+
+            ted.sdss.cutouts.crossvalidation.plot(exp='many', quality=[1, 3])
+
+        elif 'q123' in args:
+
+            ted.sdss.cutouts.crossvalidation.plot(exp='many', quality=[1, 2, 3])
+
     if 'cut-cv-many-plot-all' in args:
 
         qualities = [
@@ -495,4 +539,4 @@ def main(*args):
 
 
 if __name__ == '__main__':
-    main(*sys.argv[1:])
+    raise SystemExit(main())
