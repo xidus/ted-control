@@ -7,6 +7,20 @@
 """
 Control module for running the programs
 written for my master's thesis project.
+
+To do
+-----
+Make script check whether some procedure has been performed,
+before a procedure that depends on this being so is performed.
+
+One way to do it could be to update a log file which can be cleared
+if there is a need for starting over from the top. This would only
+be a deletion of records of the steps having been performed so far,
+and not the data that were generated as a consequence of running
+those procedures. Each of the procedures may or may not check if
+any given data already exist and redo or skip creating those data
+unless specifically being forced to.
+
 """
 
 import ted
@@ -24,56 +38,47 @@ from setup_and_parse import setup_and_parse
 def load_args():
     arglist = [
         (
-            ('-a', '--action'), dict(type=str, default=None, help='Action to perform')
+            ('-c', '--cas'),
+            dict(type=str, nargs='?', default=None, help='Actions for the CAS')
         ),
         (
-            ('-x', '--exp'), dict(type=str, default=None, help='The name of the experiment to run')
+            ('-d', '--das'),
+            dict(type=str, nargs='?', default=None, help='Actions for the DAS')
         ),
         (
-            ('-q', '--quality'), dict(type=int, nargs='+', default=[1, 2, 3])
+            ('-s', '--snlist'),
+            dict(type=str, nargs='?', default=None, help='Actions for SNLIST')
         ),
-        # (
-        #     ('--qall'), dict(action='store_true')
-        # ),
+        (
+            ('-g', '--gxlist'),
+            dict(type=str, nargs='?', default=None, help='Actions for GXLIST')
+        ),
+        (
+            ('-t', '--tlist'),
+            dict(type=str, nargs='?', default=None, help='Actions for TLIST')
+        ),
+        (
+            ('-x', '--exp'),
+            dict(type=str, default=None, help='The name of the experiment to run')
+        ),
+        (
+            ('-a', '--action'),
+            dict(type=str, default=None, help='Action to perform')
+        ),
+        (
+            ('-q', '--quality'),
+            dict(type=int, nargs='+', default=[1, 2, 3])
+        ),
     ]
     return setup_and_parse(__doc__, arglist)
 
 
 def main():
-    """
-    Parameters
-    ----------
-    args : list
-        contains words whose order is independent
-        from their use in this function.
-
-        If a word whose presence is checked for *is* present,
-        some action is performed. But only in the order in
-        which it is placed in the script.
-
-    To do
-    -----
-    Make script check whether some procedure has been performed,
-    before a procedure that depends on this being so is performed.
-
-    One way to do it could be to update a log file which can be cleared
-    if there is a need for starting over from the top. This would only
-    be a deletion of records of the steps having been performed so far,
-    and not the data that were generated as a consequence of running
-    those procedures. Each of the procedures may or may not check if
-    any given data already exist and redo or skip creating those data
-    unless specifically being forced to.
-
-    Returns
-    -------
-    None
-
-    """
 
     args = load_args()
 
     # Temporary hack
-    args.__class__.__contains__ = lambda self, item: False
+    # args.__class__.__contains__ = lambda self, item: False
 
     # CAS
     # query database and save results for each supernova coordinate in separate file.
@@ -101,165 +106,181 @@ def main():
 
     """
 
-    if 'snlist-merge' in args:
+    if args.snlist is not None:
 
-        ted.sdss.merge_sne_lists()
+        if 'merge' in args.snlist:
 
-    if 'snlist-sql-insert' in args:
+            ted.sdss.merge_sne_lists()
 
-        ted.sdss.sql_fill_table_SNe()
+        if 'sql-insert' in args.snlist:
 
-    if 'snlist-check-duplicates' in args:
+            ted.sdss.sql_fill_table_SNe()
 
-        ted.sdss.cas.check_snlist()
+        if 'check-duplicates' in args.snlist:
+
+            ted.sdss.cas.check_snlist()
 
     # ----------------------------------------------------------------------- #
 
     """CAS"""
 
-    # Clean up?
-    if 'cas-clean' in args:
+    if args.cas is not None:
 
-        ted.sdss.cas.field_clean_local_dir()
+        # Clean up?
+        if 'clean' in args.cas:
 
-    if 'cas-get-fields' in args:
+            ted.sdss.cas.field_clean_local_dir()
 
-        # Just for showing a few datapoints.
-        # Incidentally, this call also makes sure that the source candidate files are being merged into one, if not already done.
-        df = ted.sdss.load_SNe_candidate_list()
-        print df.head(3)
-        # df.index = df.SDSS_id
+        if 'get-fields' in args.cas:
 
-        print '\nQuerying CAS online form (skipping existing files) ...'
-        ted.sdss.cas.get_fields()
-        # ted.sdss.CAS_get_fields(in_parallel=True, pool_size=10) # Not possible, since CAS online query form limits to 1 request per second.
+            # Just for showing a few datapoints.
+            # Incidentally, this call also makes sure that the source candidate files are being merged into one, if not already done.
+            df = ted.sdss.load_SNe_candidate_list()
+            print df.head(3)
+            # df.index = df.SDSS_id
 
-        print 'cas-get-fields: Done ...'
+            print '\nQuerying CAS online form (skipping existing files) ...'
+            ted.sdss.cas.get_fields()
+            # ted.sdss.CAS_get_fields(in_parallel=True, pool_size=10) # Not possible, since CAS online query form limits to 1 request per second.
 
-    if 'cas-get-fields-force' in args:
+            print 'get-fields: Done ...'
 
-        print '\nQuerying CAS online form (force-mode) ...'
-        ted.sdss.cas.get_fields(skip_if_exists=False)
-        # ted.sdss.CAS_get_fields(in_parallel=True, pool_size=10) # Not possible, since CAS online query form limits to 1 request per second.
+        if 'get-fields-force' in args.cas:
 
-        print 'cas-get-fields-forced: Done ...'
+            print '\nQuerying CAS online form (force-mode) ...'
+            ted.sdss.cas.get_fields(skip_if_exists=False)
+            # ted.sdss.CAS_get_fields(in_parallel=True, pool_size=10) # Not possible, since CAS online query form limits to 1 request per second.
 
-    if 'cas-csv-fields-gather' in args:
+            print 'get-fields-forced: Done ...'
 
-        # Build a single list of alle the unique fields that cover any of the candidate supernovae.
-        print 'cas-csv-fields-gather: Creating unique field list ...'
-        # Keep invalid frames (negative or having ~ zero RA extent) for now,
-        # but this is a big problem, when coding up the analysis,
-        # since I need to manually exclude these every time.
-        ted.sdss.cas.create_unique_field_list()
+        if 'csv-fields-gather' in args.cas:
 
-    if 'cas-csv-fields-filter-invalid' in args:
+            # Build a single list of alle the unique fields that cover any of the candidate supernovae.
+            print 'csv-fields-gather: Creating unique field list ...'
+            # Keep invalid frames (negative or having ~ zero RA extent) for now,
+            # but this is a big problem, when coding up the analysis,
+            # since I need to manually exclude these every time.
+            ted.sdss.cas.create_unique_field_list()
 
-        print 'cas-csv-fields-filter-invalid: Filtering invalid fields from unique field list ...'
-        ted.sdss.cas.filter_invalid_from_unique_field_list()
+        if 'csv-fields-filter-invalid' in args.cas:
 
-    if 'cas-csv-fields-nrecords' in args:
+            print 'csv-fields-filter-invalid: Filtering invalid fields from unique field list ...'
+            ted.sdss.cas.filter_invalid_from_unique_field_list()
 
-        # Count how many fields that cover each candidate.
-        print 'cas-csv-fields-nrecords: Counting field records for each supernova ...'
-        ted.sdss.cas.count_field_records()
+        if 'csv-fields-nrecords' in args.cas:
 
-    if 'cas-csv-fields-nrecords-q' in args:
+            # Count how many fields that cover each candidate.
+            print 'csv-fields-nrecords: Counting field records for each supernova ...'
+            ted.sdss.cas.count_field_records()
 
-        print 'cas-csv-fields-nrecords-q: Counting field records for each supernova ...'
-        ted.sdss.cas.count_field_records_by_quality()
+        if 'csv-fields-nrecords-q' in args.cas:
+
+            print 'csv-fields-nrecords-q: Counting field records for each supernova ...'
+            ted.sdss.cas.count_field_records_by_quality()
 
     # ----------------------------------------------------------------------- #
 
     """GALAXIES"""
 
-    if 'cas-get-galaxies' in args:
+    if args.gxlist is not None:
 
-        ted.sdss.cas.get_galaxies()
+        if 'get-galaxies' in args.gxlist:
 
-    if 'cas-create-galaxy-list' in args:
+            ted.sdss.cas.get_galaxies()
 
-        ted.sdss.cas.create_galaxy_list()
+        if 'create-galaxy-list' in args.gxlist:
 
-    if 'cas-build-tlist' in args:
+            ted.sdss.cas.create_galaxy_list()
 
-        ted.sdss.cas.build_tlist()
+    # ----------------------------------------------------------------------- #
 
-    if 'cas-build-tlist-sample' in args:
+    """TRAINING and TEST data set (TLIST)"""
 
-        ted.sdss.cas.build_tlist_sample()
+    if args.tlist is not None:
 
-    if 'cas-check-tlist' in args:
+        if 'build' in args.tlist:
 
-        """For each entry in `tlist.csv`, find out how many fields cover it."""
-        ted.sdss.cas.check_tlist()
+            ted.sdss.cas.build_tlist()
+
+        if 'build-sample' in args.tlist:
+
+            ted.sdss.cas.build_tlist_sample()
+
+        if 'check' in args.tlist:
+
+            """For each entry in `tlist.csv`,
+            find out how many fields cover it."""
+            ted.sdss.cas.check_tlist()
 
     # ----------------------------------------------------------------------- #
 
     """DAS"""
 
-    if 'das-get-some' in args:
+    if args.das is not None:
 
-        print 'Getting only some of the frames from the DAS for testing ...'
-        # Select slice of SNe candidates to download frames for.
-        # A single function gets a single FITS file, and it is called when downloading both all or some of the frames.
-        #   it should
-        #       * check if the file exists
-        #       * copy the file structure of the DAS ,when saving the files locally.
-        #   should it
-        #       * update a database table of downloaded frames?
-        #           or would this be better done with a general file checking script which uses a database table of all the frames, and checks each file one by one to see if it was downloade, and, if not, try to download it, if an attempt has not already been made and the HTTP status code made it clear that it would not be available. Compile a list of non-downloadable frames and send it to the SDSS collaboration.
-        #
-        # ted.sdss.das.download_frames_by_sn(bix=0, eix=5, frame_type='fpC', filt='r', pool_size=10)
-        ted.sdss.das.download_frames_by_sn(bix=5, eix=10, frame_type='fpC', filt='r', pool_size=10)
+        if 'get-some' in args.das:
 
-    if 'das-get-all' in args:
+            print 'Getting only some of the frames from the DAS for testing ...'
+            # Select slice of SNe candidates to download frames for.
+            # A single function gets a single FITS file, and it is called when downloading both all or some of the frames.
+            #   it should
+            #       * check if the file exists
+            #       * copy the file structure of the DAS ,when saving the files locally.
+            #   should it
+            #       * update a database table of downloaded frames?
+            #           or would this be better done with a general file checking script which uses a database table of all the frames, and checks each file one by one to see if it was downloade, and, if not, try to download it, if an attempt has not already been made and the HTTP status code made it clear that it would not be available. Compile a list of non-downloadable frames and send it to the SDSS collaboration.
+            #
+            # ted.sdss.das.download_frames_by_sn(bix=0, eix=5, frame_type='fpC', filt='r', pool_size=10)
+            ted.sdss.das.download_frames_by_sn(bix=5, eix=10, frame_type='fpC', filt='r', pool_size=10)
 
-        print 'Getting all of the frames from the DAS ...'
+        if 'get-all' in args.das:
 
-        print '\nBuilding unique list of URIs to download from DAS ...'
-        ted.sdss.das.export_fpC_URIs()
+            print 'Getting all of the frames from the DAS ...'
 
-        # ted.sdss.DAS_download_fields(in_parallel=True, pool_size=10)
-        ted.sdss.das.download_fields_from_list(pool_size=20)
-        # ted.sdss.DAS_download_fields()
+            print '\nBuilding unique list of URIs to download from DAS ...'
+            ted.sdss.das.export_fpC_URIs()
 
-    if 'das-check-field-list' in args:
+            # ted.sdss.DAS_download_fields(in_parallel=True, pool_size=10)
+            ted.sdss.das.download_fields_from_list(pool_size=20)
+            # ted.sdss.DAS_download_fields()
 
-        print 'Assuming that all frames have been downloaded,'
-        print 'excluded from fields.csv entries for which frames do not work.'
+        if 'check-field-list' in args.das:
 
-        # ted.sdss.das.check_field_list()
-        ted.sdss.das.check_field_list(do_get_frames=False)
+            print 'Assuming that all frames have been downloaded,'
+            print 'excluded from fields.csv entries for which frames do not work.'
 
+            # ted.sdss.das.check_field_list()
+            ted.sdss.das.check_field_list(do_get_frames=False)
 
     # ----------------------------------------------------------------------- #
 
     """CUTOUTS"""
 
-    if 'cut-create-raw' in args:
+    if args.cut is not None:
 
-        ted.sdss.cutouts.create_cutout_data()
+        if 'create-raw' in args.cut:
 
-    if 'cut-create-fp2q' in args:
+            ted.sdss.cutouts.create_cutout_data()
 
-        ted.sdss.cutouts.create_cutout_original_to_field_quality_dict()
+        if 'create-fp2q' in args.cut:
 
-    if 'cut-create-c2q' in args:
+            ted.sdss.cutouts.create_cutout_original_to_field_quality_dict()
 
-        ted.sdss.cutouts.create_cutout2quality_mapping()
+        if 'create-c2q' in args.cut:
 
-    if 'cut-remove-unwanted' in args:
+            ted.sdss.cutouts.create_cutout2quality_mapping()
 
-        ted.sdss.cutouts.manage.remove_unwanted_data()
+        if 'remove-unwanted' in args.cut:
 
-    if 'cut-remove-flags' in args:
+            ted.sdss.cutouts.manage.remove_unwanted_data()
 
-        ted.sdss.cutouts.manage.remove_flags()
+        if 'remove-flags' in args.cut:
 
-    if 'cut-tlist-log-plot' in args:
+            ted.sdss.cutouts.manage.remove_flags()
 
-        ted.sdss.cutouts.plotting.plot_tlist_log()
+        if 'tlist-log-plot' in args.cut:
+
+            ted.sdss.cutouts.plotting.plot_tlist_log()
 
     # ----------------------------------------------------------------------- #
 
