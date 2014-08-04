@@ -19,9 +19,6 @@ It depends on a argument-parsing module that I have written, called [`setup_and_
 
 The module is meant to be called directly from the command line.
 
-(Examples might show up here. Otherwise, look through the code and see what it does.)
-
-
 # Running the entire pipeline
 
 ## Data acquisition
@@ -53,7 +50,7 @@ Create a single file with all the unique and sorted results from the above query
 
 #### Galaxies
 
-To do the following steps requires that the galaxy catalogue has been downloaded from CasJobs using the SQL query in the sdss folder of the repository for TED. 
+To do the following steps requires that the galaxy catalogue has been downloaded from CasJobs using the SQL query in the sdss folder of the repository for [TED](https://github.com/xidus/ted). 
 
     $ main.py --gxlist create-galaxy-list
 
@@ -86,7 +83,7 @@ Create the raw cutout sequences and perform astrometrical alignment of all image
 
     $ main.py --cut create-raw
 
-This following steps were not initially performed, when creating the cutout sequences. But in order to select only cutouts with certain qualities a mapping between each cutout and its quality based on the original frame from which it came has to be created.
+The following steps were not initially performed, when creating the cutout sequences. But in order to select only cutouts with certain qualities a mapping between each cutout and its quality based on the original frame from which it came has to be created.
 
 First create the mapping between the field and the frame from which the cutout was created.
 
