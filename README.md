@@ -82,11 +82,11 @@ Combine coordinates from `snlist` with coordinates from `gxlist`.
 
 ### Cutout sequences
 
-    $ main.py --cut build
+Create the raw cutout sequences and perform astrometrical alignment of all images in the final sequence using the first-observed cutout frame as the reference.
 
     $ main.py --cut create-raw
 
-This was not initially done, when creating the cutout sequences, but in order to select only cutouts with certain qualities a mapping between each cutout and its quality based on the original frame from which it came has to be created.
+This following steps were not initially performed, when creating the cutout sequences. But in order to select only cutouts with certain qualities a mapping between each cutout and its quality based on the original frame from which it came has to be created.
 
 First create the mapping between the field and the frame from which the cutout was created.
 
