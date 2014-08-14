@@ -38,6 +38,10 @@ from setup_and_parse import setup_and_parse
 def load_args():
     arglist = [
         (
+            ('-s', '--snlist'),
+            dict(type=str, nargs='?', default=None, help='Actions for SNLIST')
+        ),
+        (
             ('-c', '--cas'),
             dict(type=str, nargs='?', default=None, help='Actions for the CAS')
         ),
@@ -46,16 +50,16 @@ def load_args():
             dict(type=str, nargs='?', default=None, help='Actions for the DAS')
         ),
         (
-            ('-s', '--snlist'),
-            dict(type=str, nargs='?', default=None, help='Actions for SNLIST')
-        ),
-        (
             ('-g', '--gxlist'),
             dict(type=str, nargs='?', default=None, help='Actions for GXLIST')
         ),
         (
             ('-t', '--tlist'),
             dict(type=str, nargs='?', default=None, help='Actions for TLIST')
+        ),
+        (
+            ('-u', '--cut'),
+            dict(type=str, nargs='?', default=None, help='Actions for cutout sequences')
         ),
         (
             ('-x', '--exp'),
